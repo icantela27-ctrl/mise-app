@@ -3,11 +3,437 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mise App</title>
+  <title>Mise | Food Orders</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #182033;
+    }
+
+    header {
+      background: #182033;
+      color: white;
+      padding: 20px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 25px;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+
+    .status {
+      background: #1f9d70;
+      padding: 9px 13px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 24px;
+      max-width: 1180px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 4px 14px rgba(24, 32, 51, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: 20px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .menu-item {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-item h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .menu-item p {
+      margin: 0;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .price {
+      color: #e3653b;
+      font-weight: bold;
+      margin-top: 10px !important;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .add-btn {
+      background: #182033;
+      color: white;
+      padding: 10px 12px;
+      white-space: nowrap;
+    }
+
+    .add-btn:hover {
+      background: #31415f;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin: 15px 0 6px;
+      color: #475569;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 11px;
+      font-size: 15px;
+    }
+
+    .order-list {
+      margin-top: 18px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .empty-order {
+      color: #64748b;
+      text-align: center;
+      padding: 30px 0;
+    }
+
+    .order-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .order-name {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .order-price {
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quantity-btn {
+      width: 28px;
+      height: 28px;
+      background: #e9eef6;
+      color: #182033;
+      font-size: 17px;
+    }
+
+    .remove-btn {
+      background: #fff1ef;
+      color: #d9482b;
+      padding: 7px 9px;
+      font-size: 12px;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 19px;
+      font-weight: bold;
+      padding: 20px 0;
+    }
+
+    .place-order {
+      width: 100%;
+      background: #e3653b;
+      color: white;
+      padding: 14px;
+      font-size: 16px;
+    }
+
+    .place-order:hover {
+      background: #c74e28;
+    }
+
+    #message {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 14px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    @media (max-width: 800px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding: 18px 20px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Mise deployable prototype</h1>
-  <p>This is the packaged deployment file for the latest static Mise prototype.</p>
-  <p>Use the zip package to deploy to Netlify Drop or Vercel.</p>
+  <header>
+    <div>
+      <h1>Mise</h1>
+      <p>Restaurant food ordering</p>
+    </div>
+    <div class="status">● OPEN</div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Menu</h2>
+
+      <div class="menu-grid">
+        <div class="menu-item">
+          <div>
+            <h3>Classic Burger</h3>
+            <p>Beef patty, cheese, lettuce and sauce</p>
+            <p class="price">$16.00</p>
+          </div>
+          <button class="add-btn" onclick="addItem('Classic Burger', 16)">+ Add</button>
+        </div>
+
+        <div class="menu-item">
+          <div>
+            <h3>Chicken Wrap</h3>
+            <p>Grilled chicken, salad and garlic sauce</p>
+            <p class="price">$14.00</p>
+          </div>
+          <button class="add-btn" onclick="addItem('Chicken Wrap', 14)">+ Add</button>
+        </div>
+
+        <div class="menu-item">
+          <div>
+            <h3>Margherita Pizza</h3>
+            <p>Tomato, mozzarella and basil</p>
+            <p class="price">$18.00</p>
+          </div>
+          <button class="add-btn" onclick="addItem('Margherita Pizza', 18)">+ Add</button>
+        </div>
+
+        <div class="menu-item">
+          <div>
+            <h3>Caesar Salad</h3>
+            <p>Cos lettuce, parmesan, croutons and dressing</p>
+            <p class="price">$13.00</p>
+          </div>
+          <button class="add-btn" onclick="addItem('Caesar Salad', 13)">+ Add</button>
+        </div>
+
+        <div class="menu-item">
+          <div>
+            <h3>Hot Chips</h3>
+            <p>Seasoned crispy fries</p>
+            <p class="price">$7.00</p>
+          </div>
+          <button class="add-btn" onclick="addItem('Hot Chips', 7)">+ Add</button>
+        </div>
+
+        <div class="menu-item">
+          <div>
+            <h3>Soft Drink</h3>
+            <p>Coke, Sprite, Fanta or lemonade</p>
+            <p class="price">$4.00</p>
+          </div>
+          <button class="add-btn" onclick="addItem('Soft Drink', 4)">+ Add</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <h2>Current Order</h2>
+
+      <label for="tableNumber">Table number</label>
+      <input id="tableNumber" type="text" placeholder="For example: Table 5" />
+
+      <label for="customerName">Customer name (optional)</label>
+      <input id="customerName" type="text" placeholder="For example: Sarah" />
+
+      <div id="orderList" class="order-list">
+        <p class="empty-order">No items added yet.</p>
+      </div>
+
+      <div class="total">
+        <span>Total</span>
+        <span id="total">$0.00</span>
+      </div>
+
+      <button class="place-order" onclick="placeOrder()">Place Order</button>
+      <div id="message"></div>
+    </aside>
+  </main>
+
+  <script>
+    const order = [];
+
+    function addItem(name, price) {
+      const existingItem = order.find(item => item.name === name);
+
+      if (existingItem) {
+        existingItem.quantity++;
+      } else {
+        order.push({ name, price, quantity: 1 });
+      }
+
+      renderOrder();
+    }
+
+    function changeQuantity(name, amount) {
+      const item = order.find(item => item.name === name);
+
+      if (!item) return;
+
+      item.quantity += amount;
+
+      if (item.quantity <= 0) {
+        removeItem(name);
+      } else {
+        renderOrder();
+      }
+    }
+
+    function removeItem(name) {
+      const itemIndex = order.findIndex(item => item.name === name);
+
+      if (itemIndex !== -1) {
+        order.splice(itemIndex, 1);
+      }
+
+      renderOrder();
+    }
+
+    function renderOrder() {
+      const orderList = document.getElementById('orderList');
+      const totalElement = document.getElementById('total');
+
+      if (order.length === 0) {
+        orderList.innerHTML = '<p class="empty-order">No items added yet.</p>';
+        totalElement.textContent = '$0.00';
+        return;
+      }
+
+      let total = 0;
+
+      orderList.innerHTML = order.map(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+
+        return `
+          <div class="order-row">
+            <div>
+              <div class="order-name">${item.name}</div>
+              <div class="order-price">$${item.price.toFixed(2)} each</div>
+            </div>
+            <div class="quantity-controls">
+              <button class="quantity-btn" onclick="changeQuantity('${item.name}', -1)">−</button>
+              <strong>${item.quantity}</strong>
+              <button class="quantity-btn" onclick="changeQuantity('${item.name}', 1)">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeItem('${item.name}')">Remove</button>
+          </div>
+        `;
+      }).join('');
+
+      totalElement.textContent = `$${total.toFixed(2)}`;
+    }
+
+    function placeOrder() {
+      const tableNumber = document.getElementById('tableNumber').value.trim();
+      const customerName = document.getElementById('customerName').value.trim();
+      const message = document.getElementById('message');
+
+      if (order.length === 0) {
+        message.style.display = 'block';
+        message.style.background = '#fee2e2';
+        message.style.color = '#991b1b';
+        message.textContent = 'Add at least one menu item before placing the order.';
+        return;
+      }
+
+      if (!tableNumber) {
+        message.style.display = 'block';
+        message.style.background = '#fee2e2';
+        message.style.color = '#991b1b';
+        message.textContent = 'Please enter a table number.';
+        return;
+      }
+
+      const orderCount = order.reduce((sum, item) => sum + item.quantity, 0);
+
+      message.style.display = 'block';
+      message.style.background = '#dcfce7';
+      message.style.color = '#166534';
+      message.textContent =
+        `Order placed for ${tableNumber}${customerName ? ' — ' + customerName : ''}. ` +
+        `${orderCount} item${orderCount === 1 ? '' : 's'} sent to the kitchen!`;
+
+      order.splice(0, order.length);
+      document.getElementById('tableNumber').value = '';
+      document.getElementById('customerName').value = '';
+      renderOrder();
+    }
+  </script>
 </body>
 </html>
